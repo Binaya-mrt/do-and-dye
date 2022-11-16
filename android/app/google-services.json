@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "990000369617",
+    "project_id": "do-and-dye",
+    "storage_bucket": "do-and-dye.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990000369617:android:8d5cd1d46e7720fa909af0",
+        "android_client_info": {
+          "package_name": "com.example.do_and_dye"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990000369617-97omt5qvoevfedrhjcadvafklroi038v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEfHuqPiXDMmPRnYQF64JHRuhkbGoZYEU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "990000369617-97omt5qvoevfedrhjcadvafklroi038v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
