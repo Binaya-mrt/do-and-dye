@@ -46,7 +46,7 @@ class _BarberHomeState extends State<BarberHome> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print("pressed");
-          BarberUpdate().addtoQueue();
+          BarberUpdate().addtoQueuePhysically(widget.uuid);
         },
         child: Icon(Icons.add),
       ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/main.dart';
+import 'package:do_and_dye/screens/user_booking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -41,15 +42,38 @@ class UserHome extends StatelessWidget {
                 return Center(child: CircularProgressIndicator());
               } else {
                 return Column(
+                  //Text(((snapshot.data as QuerySnapshot)
+                  // .docs[index]
+                  // .data() as Map)["name"]),
                   children: [
                     ListView.builder(
                         shrinkWrap: true,
                         itemCount: (snapshot.data as QuerySnapshot).docs.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(
-                                ((snapshot.data as QuerySnapshot).docs.length)
-                                    .toString()),
+                          return GestureDetector(
+                            onTap: (() => Get.to(() => UserBooking(
+                                  snap: (snapshot.data as dynamic)
+                                      .docs[index]
+                                      .data(),
+                                  name: name,
+                                ))),
+                            child: Card(
+                              child: ListTile(
+                                title: Text(
+                                    "Salon name: ${(snapshot.data as dynamic).docs[index].data()["shopname"]}"),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        "Address: ${(snapshot.data as dynamic).docs[index].data()["shopaddress"]}"),
+                                    Text(
+                                        "Owner: ${(snapshot.data as dynamic).docs[index].data()["name"]}"),
+                                  ],
+                                ),
+                                trailing: Text(
+                                    "No.of Seat: ${(snapshot.data as dynamic).docs[index].data()["noofcounter"]}"),
+                              ),
+                            ),
                           );
                         })
                   ],

@@ -69,10 +69,13 @@ class AuthMethod {
             .set({
           "email": email,
           "name": name,
+          "shopname": shopname,
+          "shopaddress": address,
+          "noofcounter": noofcounter,
+          "pannumber": pannumber,
           "phone": phone,
-          "address": address,
-          "isBarber": isBarber,
           "uid": cred.user!.uid,
+          "isBarber": isBarber,
         });
       }
       log(cred.user!.uid);
@@ -105,9 +108,13 @@ class AuthMethod {
 
         if (res == "success") {
           log("success");
+
           log(cred.user!.uid);
-          UserModel _user = UserModel.fromSnap(
-              await _fireStore.collection("users").doc(cred.user!.uid).get());
+          UserModel _user = UserModel.fromSnap(await _fireStore
+              .collection("customers")
+              .doc(cred.user!.uid)
+              .get());
+          log(_user.toString());
           log(_user.toString() + " muji USER");
           prefs.setString("uuid", cred.user!.uid);
           prefs.setString("name", _user.name);

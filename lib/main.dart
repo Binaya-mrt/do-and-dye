@@ -8,13 +8,24 @@ import 'package:do_and_dye/signup_barber.dart';
 import 'package:do_and_dye/signup_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyAzQjCIIkcmbM2udRalwT-lHAWM68U4UPA",
+            appId: "1:990000369617:web:da099b997490cab2909af0",
+            messagingSenderId: "990000369617",
+            storageBucket: "do-and-dye.appspot.com",
+            projectId: "do-and-dye"));
+  } else {
+    await Firebase.initializeApp();
+  }
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var uuid = prefs.getString('uuid');
@@ -66,7 +77,7 @@ class LoginPage extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => UserHome(
                     uuid: FirebaseAuth.instance.currentUser!.uid,
-                    name: FirebaseAuth.instance.currentUser!.displayName!,
+                    name: "binaya",
                   )));
     } else {
       print("Error");
