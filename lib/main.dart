@@ -34,9 +34,10 @@ void main() async {
   runApp(GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      theme: ThemeData.dark(
+        useMaterial3: true,
       ),
+      color: Color(0xffaf3557),
       home: uuid == null
           ? LoginPage()
           : userType == "barber"
