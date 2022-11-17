@@ -3,8 +3,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthMethod {
@@ -24,7 +22,7 @@ class AuthMethod {
     required bool isBarber,
   }) async {
     String res = "Some error occured";
-    log("1. The user is a : " + isBarber.toString());
+    log("1. The user is a : $isBarber");
     try {
       // this will only signup a user
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
@@ -78,13 +76,10 @@ class AuthMethod {
           "isBarber": isBarber,
         });
       }
-      log(cred.user!.uid);
-      log("success");
+
       res = "success";
     } on FirebaseAuthException catch (err) {
       res = err.message.toString();
-    } catch (err) {
-      res = err.toString();
     } catch (err) {
       res = err.toString();
     }
@@ -98,7 +93,7 @@ class AuthMethod {
 
     String res = "Some error occured";
     // log(email);
-    log(password + " passwrord");
+    log("$password passwrord");
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
         // this will only signup a user
@@ -110,18 +105,18 @@ class AuthMethod {
           log("success");
 
           log(cred.user!.uid);
-          UserModel _user = UserModel.fromSnap(await _fireStore
+          UserModel user = UserModel.fromSnap(await _fireStore
               .collection("customers")
               .doc(cred.user!.uid)
               .get());
-          log(_user.toString());
-          log(_user.toString() + " muji USER");
+          log(user.toString());
+          log("$user muji USER");
           prefs.setString("uuid", cred.user!.uid);
-          prefs.setString("name", _user.name);
+          prefs.setString("name", user.name);
 
-          prefs.setString("userType", _user.isBarber ? "barber" : "customer");
+          prefs.setString("userType", user.isBarber ? "barber" : "customer");
 
-          if (_user.isBarber) {
+          if (user.isBarber) {
             res = "barber";
           } else {
             res = "customer";

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/controllers/barber_customer_list.dart';
@@ -32,7 +31,7 @@ class _BarberHomeState extends State<BarberHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Do and dye"),
+        title: const Text("Do and dye"),
         actions: [
           IconButton(
               onPressed: () async {
@@ -40,7 +39,7 @@ class _BarberHomeState extends State<BarberHome> {
                 prefs.clear();
                 Get.offAll(() => LoginPage());
               },
-              icon: Icon(Icons.logout))
+              icon: const Icon(Icons.logout))
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -48,7 +47,7 @@ class _BarberHomeState extends State<BarberHome> {
           print("pressed");
           BarberUpdate().addtoQueuePhysically(widget.uuid);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -62,7 +61,7 @@ class _BarberHomeState extends State<BarberHome> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else {
                   return Column(
                     children: [
@@ -72,18 +71,18 @@ class _BarberHomeState extends State<BarberHome> {
                         },
                         child: Text(
                           "Today's total: ${(snapshot.data! as dynamic).data()['todaysTotal']}",
-                          style: TextStyle(fontSize: 24),
+                          style: const TextStyle(fontSize: 24),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text(
+                      const Text(
                         "On process",
                         style: TextStyle(fontSize: 22),
                       ),
                       (snapshot.data! as dynamic).data()['system'].length == 0
-                          ? SizedBox(
+                          ? const SizedBox(
                               height: 50,
                               child: Text(
                                 "No one is currently cutting hair",
@@ -94,7 +93,7 @@ class _BarberHomeState extends State<BarberHome> {
                               itemCount: (snapshot.data! as dynamic)
                                   .data()['system']
                                   .length,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
@@ -117,15 +116,15 @@ class _BarberHomeState extends State<BarberHome> {
                                 );
                               },
                             ),
-                      Text(
+                      const Text(
                         "Queue",
                         style: TextStyle(fontSize: 22),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       (snapshot.data! as dynamic).data()['queue'].length == 0
-                          ? SizedBox(
+                          ? const SizedBox(
                               height: 50,
                               child: Text(
                                 "No one is in the queue!",
@@ -133,7 +132,7 @@ class _BarberHomeState extends State<BarberHome> {
                               ),
                             )
                           : ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return GestureDetector(

@@ -2,19 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/main.dart';
 import 'package:do_and_dye/screens/user_booking_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHome extends StatelessWidget {
   final String uuid;
   final String name;
-  UserHome({
+  const UserHome({
     required this.uuid,
     required this.name,
   });
-  final Color color = Color(0xffaf3557);
+  final Color color = const Color(0xffaf3557);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,7 @@ class UserHome extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.black,
-        title: Image(
+        title: const Image(
           height: 150,
           image: AssetImage("assets/images/dondye.png"),
         ),
@@ -43,20 +41,20 @@ class UserHome extends StatelessWidget {
                 backgroundColor: Colors.white,
                 child: Text(
                   name[0],
-                  style: TextStyle(fontSize: 40.0),
+                  style: const TextStyle(fontSize: 40.0),
                 ),
               ),
             ),
             ListTile(
-              title: Text("Change Password"),
+              title: const Text("Change Password"),
               onTap: () async {},
             ),
             ListTile(
-              title: Text("Change Location"),
+              title: const Text("Change Location"),
               onTap: () async {},
             ),
             ListTile(
-              title: Text("Logout"),
+              title: const Text("Logout"),
               onTap: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -106,8 +104,8 @@ class UserHome extends StatelessWidget {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Card(
                                     color: index % 2 == 0
-                                        ? Color(0xffFFF0EC)
-                                        : Color(0xffEBF5FF),
+                                        ? const Color(0xffFFF0EC)
+                                        : const Color(0xffEBF5FF),
                                     child: Row(
                                       children: [
                                         Expanded(
@@ -126,7 +124,7 @@ class UserHome extends StatelessWidget {
                                                 child: Text(
                                                   (snapshot.data as dynamic)
                                                       .docs[index]
-                                                      .data()["name"],
+                                                      .data()["shopname"],
                                                   style: TextStyle(
                                                       fontSize: 22,
                                                       color: color,
@@ -137,7 +135,7 @@ class UserHome extends StatelessWidget {
                                               detailsText(
                                                   (snapshot.data as dynamic)
                                                       .docs[index]
-                                                      .data()["shopname"]),
+                                                      .data()["name"]),
                                               detailsText(
                                                   (snapshot.data as dynamic)
                                                       .docs[index]

@@ -1,8 +1,5 @@
 import 'package:do_and_dye/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:get/get_state_manager/src/simple/list_notifier.dart';
 
 import 'auth/auth_method.dart';
 
@@ -16,6 +13,7 @@ class BarberSignup extends StatelessWidget {
   final TextEditingController _noofcounterController = TextEditingController();
   final TextEditingController _pannumberController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+
   barberSignup({
     required String name,
     required String email,
@@ -40,7 +38,7 @@ class BarberSignup extends StatelessWidget {
     );
     if (res == "success") {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Signup Successful"),
         ),
       );
@@ -48,7 +46,7 @@ class BarberSignup extends StatelessWidget {
           MaterialPageRoute(builder: (context) => LoginPage()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Signup Failed"),
         ),
       );
@@ -138,9 +136,8 @@ class BarberSignup extends StatelessWidget {
                       phone: _phoneController.text,
                       context: context,
                     );
-                    print("signuo button pressed");
                   },
-                  child: Text("Signup as a Owner")),
+                  child: const Text("Signup as a Owner")),
             )
           ],
         ),

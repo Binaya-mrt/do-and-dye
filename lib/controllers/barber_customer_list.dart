@@ -14,7 +14,7 @@ class BarberUpdate {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // String uuid = prefs.getString('uuid')!;
 
-    var randomID = Uuid().v1();
+    var randomID = const Uuid().v1();
     final now = DateTime.now();
     String name = "physically visited!";
     FirebaseFirestore.instance
@@ -24,7 +24,7 @@ class BarberUpdate {
         .doc(barberUuid)
         .update({
       "queue": FieldValue.arrayUnion(
-          ["${now.hour}:" + "${now.minute}" + ":${now.second}\n" + name])
+          ["${now.hour}:${now.minute}:${now.second}\n$name"])
     });
   }
 

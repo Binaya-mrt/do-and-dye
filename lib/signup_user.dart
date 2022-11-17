@@ -1,8 +1,6 @@
 import 'package:do_and_dye/auth/auth_method.dart';
 import 'package:do_and_dye/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class UserSignup extends StatelessWidget {
   UserSignup({super.key});
@@ -30,7 +28,7 @@ class UserSignup extends StatelessWidget {
     );
     if (res == "success") {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Signup Successful"),
         ),
       );
@@ -38,7 +36,7 @@ class UserSignup extends StatelessWidget {
           MaterialPageRoute(builder: (context) => LoginPage()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Signup Failed"),
         ),
       );
@@ -90,9 +88,8 @@ class UserSignup extends StatelessWidget {
                     phone: _phoneController.text,
                     context: context,
                   );
-                  print('uSER SIGnup button pressed');
                 },
-                child: Text("Signup as a User")),
+                child: const Text("Signup as a User")),
           )
         ],
       ),

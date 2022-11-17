@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/auth/auth_method.dart';
 import 'package:do_and_dye/screens/barber_main_screen.dart';
 import 'package:do_and_dye/screens/user_main_screen.dart';
@@ -34,10 +33,7 @@ void main() async {
   runApp(GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData.dark(
-        useMaterial3: true,
-      ),
-      color: Color(0xffaf3557),
+      // color: Color(0xffaf3557),
       home: uuid == null
           ? LoginPage()
           : userType == "barber"
@@ -81,7 +77,7 @@ class LoginPage extends StatelessWidget {
                     name: "binaya",
                   )));
     } else {
-      print("Error");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res)));
     }
   }
 
@@ -92,19 +88,19 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Do and Dye',
               style: TextStyle(fontSize: 35),
             ),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Enter your email',
               ),
             ),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Enter your password',
               ),
             ),
@@ -117,14 +113,14 @@ class LoginPage extends StatelessWidget {
 
                 log("login pressed");
               },
-              child: Text('Login'),
+              child: const Text('Login'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             Row(
               children: [
-                Icon(Icons.new_releases_outlined),
+                const Icon(Icons.new_releases_outlined),
                 TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -132,13 +128,13 @@ class LoginPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => UserSignup()),
                     );
                   },
-                  child: Text("New user Signup"),
+                  child: const Text("New user Signup"),
                 )
               ],
             ),
             Row(
               children: [
-                Text('✃'),
+                const Text('✃'),
                 TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -146,7 +142,7 @@ class LoginPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => BarberSignup()),
                     );
                   },
-                  child: Text("Owns a shop? Signup here!"),
+                  child: const Text("Owns a shop? Signup here!"),
                 )
               ],
             ),
