@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/models/user_model.dart';
@@ -22,7 +23,7 @@ class AuthMethod {
     required bool isBarber,
   }) async {
     String res = "Some error occured";
-    log("1. The user is a : $isBarber");
+
     try {
       // this will only signup a user
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
@@ -88,7 +89,9 @@ class AuthMethod {
 
   // loging up a user
   Future<String> loginUser(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required bool inputBarber}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String res = "Some error occured";
@@ -102,25 +105,25 @@ class AuthMethod {
         res = "success";
 
         if (res == "success") {
-          log("success");
+          if (inputBarber) {
+            UserModel user = UserModel.fromSnap(
+                await _fireStore.collection("users").doc(cred.user!.uid).get());
+            prefs.setString("uuid", cred.user!.uid);
+            prefs.setString("name", user.name);
 
-          log(cred.user!.uid);
-          UserModel user = UserModel.fromSnap(await _fireStore
-              .collection("customers")
-              .doc(cred.user!.uid)
-              .get());
-          log(user.toString());
-          log("$user muji USER");
-          prefs.setString("uuid", cred.user!.uid);
-          prefs.setString("name", user.name);
-
-          prefs.setString("userType", user.isBarber ? "barber" : "customer");
-
-          if (user.isBarber) {
+            prefs.setString("userType", "barber");
             res = "barber";
-          } else {
+          } else if (!inputBarber) {
+            UserModel user = UserModel.fromSnap(await _fireStore
+                .collection("customers")
+                .doc(cred.user!.uid)
+                .get());
+
+            prefs.setString("uuid", cred.user!.uid);
+            prefs.setString("name", user.name);
+
+            prefs.setString("userType", "customer");
             res = "customer";
-            log(res);
           }
         }
       } else {
@@ -128,6 +131,8 @@ class AuthMethod {
       }
     } on FirebaseAuthException catch (err) {
       res = err.message.toString();
+    } on SocketException catch (err) {
+      res = err.toString();
     } catch (err) {
       res = err.toString();
     }

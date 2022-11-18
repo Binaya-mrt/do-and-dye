@@ -59,7 +59,7 @@ class UserHome extends StatelessWidget {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
 
                 prefs.clear();
-                Get.offAll(() => LoginPage());
+                Get.offAll(() => const LoginPage());
               },
             ),
           ],

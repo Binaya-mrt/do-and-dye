@@ -33,7 +33,7 @@ class UserSignup extends StatelessWidget {
         ),
       );
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginPage()));
+          MaterialPageRoute(builder: (context) => const LoginPage()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

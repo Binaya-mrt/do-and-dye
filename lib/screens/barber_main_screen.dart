@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/controllers/barber_customer_list.dart';
 import 'package:do_and_dye/main.dart';
@@ -37,7 +36,7 @@ class _BarberHomeState extends State<BarberHome> {
               onPressed: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.clear();
-                Get.offAll(() => LoginPage());
+                Get.offAll(() => const LoginPage());
               },
               icon: const Icon(Icons.logout))
         ],
@@ -45,7 +44,7 @@ class _BarberHomeState extends State<BarberHome> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print("pressed");
-          BarberUpdate().addtoQueuePhysically(widget.uuid);
+          BarberUpdate().addtoQueuePhysically(widget.uuid, context);
         },
         child: const Icon(Icons.add),
       ),
@@ -67,7 +66,7 @@ class _BarberHomeState extends State<BarberHome> {
                     children: [
                       GestureDetector(
                         onLongPress: () {
-                          BarberUpdate().makeCounterZero();
+                          BarberUpdate().makeCounterZero(context);
                         },
                         child: Text(
                           "Today's total: ${(snapshot.data! as dynamic).data()['todaysTotal']}",
@@ -98,8 +97,10 @@ class _BarberHomeState extends State<BarberHome> {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onDoubleTap: () {
-                                    BarberUpdate().removeFromSystem(index,
-                                        (snapshot.data! as dynamic).data());
+                                    BarberUpdate().removeFromSystem(
+                                        index,
+                                        (snapshot.data! as dynamic).data(),
+                                        context);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -137,8 +138,10 @@ class _BarberHomeState extends State<BarberHome> {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onDoubleTap: () {
-                                    BarberUpdate().addtoSystem(index,
-                                        (snapshot.data! as dynamic).data());
+                                    BarberUpdate().addtoSystem(
+                                        index,
+                                        (snapshot.data! as dynamic).data(),
+                                        context);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(

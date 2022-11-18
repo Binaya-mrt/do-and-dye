@@ -21,7 +21,7 @@ class UserBooking extends StatelessWidget {
       String minutes = n.toString();
       return n != 0 ? "$hour hours $minutes minutes" : "$hour hours ";
     } else {
-      return "${n}minutes";
+      return "${n} minutes";
     }
   }
 
@@ -144,13 +144,28 @@ class UserBooking extends StatelessWidget {
                             ListTile(
                               title: Text("Your Turn",
                                   style: TextStyle(color: color, fontSize: 20)),
-                              subtitle: ((snapshot.data! as dynamic)
-                                          .data()['queue'])
-                                      .contains(name)
-                                  ? Text(
-                                      "Reach salon in ${hourMinuteConvert((((snapshot.data! as dynamic).data()['queue']).indexOf(name) - 1) * 30)} ")
-                                  : Text(
-                                      "Est waiting : ${hourMinuteConvert((((snapshot.data! as dynamic).data()['queue']).length - 1) * 30)}"),
+                              subtitle: (snapshot.data! as dynamic)
+                                              .data()['queue']
+                                              .length ==
+                                          0 ||
+                                      (((snapshot.data! as dynamic)
+                                                  .data()['queue'])
+                                              .indexOf(name)) ==
+                                          0
+                                  ? const Text(
+                                      "Your are at first!\n Reach salon to get your turn")
+                                  : ((snapshot.data! as dynamic)
+                                              .data()['queue'])
+                                          .contains(name)
+                                      ? Text(
+                                          // (((snapshot.data! as dynamic)
+                                          //               .data()['queue'])
+                                          //           .indexOf(name) -
+                                          //       1)
+                                          //   .toString())
+                                          "Reach salon in ${hourMinuteConvert((((snapshot.data! as dynamic).data()['queue']).indexOf(name) - 1) * 30)} ")
+                                      : Text(
+                                          "Est waiting : ${hourMinuteConvert((((snapshot.data! as dynamic).data()['queue']).length - 1) * 30)}"),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -167,20 +182,22 @@ class UserBooking extends StatelessWidget {
                                             actions: [
                                               TextButton(
                                                   style: TextButton.styleFrom(
-                                                      primary: color),
+                                                      foregroundColor: color),
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                   },
                                                   child: const Text("Ok")),
                                               TextButton(
                                                   style: TextButton.styleFrom(
-                                                      primary: color),
+                                                      foregroundColor: color),
                                                   onPressed: () {
                                                     Navigator.pop(context);
 
                                                     BarberUpdate()
                                                         .cancelAppointment(
-                                                            snap["uid"], name);
+                                                            snap["uid"],
+                                                            name,
+                                                            context);
                                                   },
                                                   child: const Text(
                                                       "Cancel Appointment"))
@@ -188,7 +205,7 @@ class UserBooking extends StatelessWidget {
                                           );
                                         })
                                     : BarberUpdate()
-                                        .addtoQueue(name, snap['uid']);
+                                        .addtoQueue(name, snap['uid'], context);
                               },
                               child: Container(
                                   margin: const EdgeInsets.all(15),
