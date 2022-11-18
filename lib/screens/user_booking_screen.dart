@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/controllers/barber_customer_list.dart';
 import 'package:flutter/material.dart';
+import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 
 class UserBooking extends StatelessWidget {
   final snap;
@@ -21,9 +22,12 @@ class UserBooking extends StatelessWidget {
       String minutes = n.toString();
       return n != 0 ? "$hour hours $minutes minutes" : "$hour hours ";
     } else {
-      return "${n} minutes";
+      return "$n minutes";
     }
   }
+
+  final String imageLink =
+      "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2Fsb258ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60";
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +58,12 @@ class UserBooking extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const Center(
+                      FullScreenWidget(
                         child: CircleAvatar(
                           radius: 60,
                           backgroundImage: NetworkImage(
-                              "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2Fsb258ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"),
+                            imageLink,
+                          ),
                         ),
                       ),
                       Column(
@@ -289,4 +294,40 @@ class ServiceListCard extends StatelessWidget {
     );
   }
 }
-// 
+
+// stl
+class ExpandedImageScreen extends StatelessWidget {
+  const ExpandedImageScreen({super.key, required this.image});
+
+  final String image;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned(
+                top: 0,
+                left: 20,
+                child: IconButton(
+                    onPressed: () {
+                      // Get.off(() => const UserBooking());
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
+                    ))),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Image.network(
+                image,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

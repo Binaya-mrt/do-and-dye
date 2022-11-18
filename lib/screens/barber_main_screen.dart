@@ -7,11 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class BarberHome extends StatefulWidget {
   final String uuid;
-  const BarberHome({required this.uuid, Key? key}) : super(key: key);
+  final String name;
+  const BarberHome({required this.uuid, required this.name, Key? key})
+      : super(key: key);
 
   @override
   State<BarberHome> createState() => _BarberHomeState();
 }
+
+const Color color = Color(0xffaf3557);
 
 // final BarberListController _list = Get.put(BarberListController());
 
@@ -30,18 +34,52 @@ class _BarberHomeState extends State<BarberHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Do and dye"),
-        actions: [
-          IconButton(
-              onPressed: () async {
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        title: const Image(
+          height: 150,
+          image: AssetImage("assets/images/dondye.png"),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
+                color: Color(0xffaf3557),
+              ),
+              accountName: Text(widget.name),
+              accountEmail: Text(widget.uuid),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Text(
+                  widget.name[0],
+                  style: const TextStyle(fontSize: 40.0),
+                ),
+              ),
+            ),
+            ListTile(
+              title: const Text("Change Password"),
+              onTap: () async {},
+            ),
+            ListTile(
+              title: const Text("Change Location"),
+              onTap: () async {},
+            ),
+            ListTile(
+              title: const Text("Logout"),
+              onTap: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
+
                 prefs.clear();
                 Get.offAll(() => const LoginPage());
               },
-              icon: const Icon(Icons.logout))
-        ],
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: color,
         onPressed: () {
           print("pressed");
           BarberUpdate().addtoQueuePhysically(widget.uuid, context);
@@ -63,22 +101,34 @@ class _BarberHomeState extends State<BarberHome> {
                   return const Center(child: CircularProgressIndicator());
                 } else {
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
                         onLongPress: () {
                           BarberUpdate().makeCounterZero(context);
                         },
-                        child: Text(
-                          "Today's total: ${(snapshot.data! as dynamic).data()['todaysTotal']}",
-                          style: const TextStyle(fontSize: 24),
+                        child: Card(
+                          child: ListTile(
+                            title: const Text(
+                              "Today's total:",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            trailing: Text(
+                              " ${(snapshot.data! as dynamic).data()['todaysTotal']}",
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        "On process",
-                        style: TextStyle(fontSize: 22),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          "On process",
+                          style: TextStyle(fontSize: 24, color: color),
+                        ),
                       ),
                       (snapshot.data! as dynamic).data()['system'].length == 0
                           ? const SizedBox(
@@ -106,7 +156,7 @@ class _BarberHomeState extends State<BarberHome> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 4.0, horizontal: 8),
                                     child: ListTile(
-                                      tileColor: Colors.green.withOpacity(0.8),
+                                      tileColor: const Color(0xffEBF5FF),
                                       title: Text((snapshot.data! as dynamic)
                                           .data()['system'][index]),
                                       //(snapshot.data! as dynamic).data()['system'][1]
@@ -117,12 +167,12 @@ class _BarberHomeState extends State<BarberHome> {
                                 );
                               },
                             ),
-                      const Text(
-                        "Queue",
-                        style: TextStyle(fontSize: 22),
-                      ),
-                      const SizedBox(
-                        height: 20,
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          "Queue",
+                          style: TextStyle(fontSize: 24, color: color),
+                        ),
                       ),
                       (snapshot.data! as dynamic).data()['queue'].length == 0
                           ? const SizedBox(
@@ -147,7 +197,7 @@ class _BarberHomeState extends State<BarberHome> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 4.0, horizontal: 8),
                                     child: ListTile(
-                                      tileColor: Colors.red.withOpacity(0.3),
+                                      tileColor: const Color(0xffFFF0EC),
                                       title: Text((snapshot.data! as dynamic)
                                           .data()['queue'][index]),
                                       leading: Text((index + 1).toString()),

@@ -140,30 +140,8 @@ class UserHome extends StatelessWidget {
                                                   (snapshot.data as dynamic)
                                                       .docs[index]
                                                       .data()["shopaddress"]),
-                                            ],
-                                          ),
-                                        ),
-                                        // Container(
-                                        //   color: Colors.white,
-                                        //   height: 200,
-                                        //   child: Image.asset(
-                                        //     // (snapshot.data as dynamic)
-                                        //     //     .docs[index]
-                                        //     //     .data()["image"],
-
-                                        //     "assets/images/bg.png",
-                                        //     fit: BoxFit.cover,
-                                        //   ),
-                                        // ),
-                                        Expanded(
-                                          child: Column(
-                                            children: [
                                               detailsText(
                                                   "Counter: ${(snapshot.data as dynamic).docs[index].data()["noofcounter"]}"),
-                                              detailsText(
-                                                  (snapshot.data as dynamic)
-                                                      .docs[index]
-                                                      .data()["phone"]),
                                               GestureDetector(
                                                 onTap: (() =>
                                                     Get.to(() => UserBooking(
@@ -176,7 +154,7 @@ class UserHome extends StatelessWidget {
                                                 child: Container(
                                                     margin:
                                                         const EdgeInsets.all(
-                                                            15),
+                                                            10),
                                                     decoration: BoxDecoration(
                                                         color: color,
                                                         borderRadius:
@@ -195,6 +173,27 @@ class UserHome extends StatelessWidget {
                                                     )),
                                               ),
                                             ],
+                                          ),
+                                        ),
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0),
+                                            height: 200,
+                                            width: 200,
+                                            decoration: const BoxDecoration(
+                                              // rounded border
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(20),
+                                                  bottomRight:
+                                                      Radius.circular(20)),
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2Fsb258ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+                                              )),
+                                            ),
                                           ),
                                         ),
                                       ],

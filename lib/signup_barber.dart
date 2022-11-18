@@ -1,5 +1,7 @@
+import 'package:do_and_dye/controllers/utils_controller.dart';
 import 'package:do_and_dye/main.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'auth/auth_method.dart';
 
@@ -13,7 +15,7 @@ class BarberSignup extends StatelessWidget {
   final TextEditingController _noofcounterController = TextEditingController();
   final TextEditingController _pannumberController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-
+  final UtilsController _utilsController = Get.put(UtilsController());
   barberSignup({
     required String name,
     required String email,
@@ -25,6 +27,7 @@ class BarberSignup extends StatelessWidget {
     required String phone,
     required BuildContext context,
   }) async {
+    _utilsController.isLoading.value = true;
     String res = await AuthMethod().signUpUser(
       name: _nameController.text,
       email: _emailController.text,
@@ -51,6 +54,7 @@ class BarberSignup extends StatelessWidget {
         ),
       );
     }
+    _utilsController.isLoading.value = false;
   }
 
   @override
@@ -157,12 +161,19 @@ class BarberSignup extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: const Color(0xffaf3557),
                         borderRadius: BorderRadius.circular(30)),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 27.0, vertical: 10),
-                      child: Text(
-                        "Signup as a Owner",
-                        style: TextStyle(fontSize: 18, color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 27.0, vertical: 10),
+                      child: Obx(
+                        () => _utilsController.isLoading.value
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text(
+                                "Signup as a Owner",
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white),
+                              ),
                       ),
                     )),
               ),

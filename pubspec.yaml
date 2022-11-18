@@ -31,12 +31,15 @@ environment:
 dependencies:
   cloud_firestore: ^4.0.5
   cupertino_icons: ^1.0.2
+  easy_splash_screen: ^1.0.4
   firebase_auth: ^4.1.2
   firebase_core: ^2.2.0
   flutter:
     sdk: flutter
+  full_screen_image_null_safe: ^2.0.0
   get: ^4.6.5
   shared_preferences: ^2.0.15
+
   uuid: ^3.0.7
 
 dev_dependencies:

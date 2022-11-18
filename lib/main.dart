@@ -7,6 +7,7 @@ import 'package:do_and_dye/screens/barber_main_screen.dart';
 import 'package:do_and_dye/screens/user_main_screen.dart';
 import 'package:do_and_dye/signup_barber.dart';
 import 'package:do_and_dye/signup_user.dart';
+import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -33,19 +34,26 @@ void main() async {
   var userType = prefs.getString('userType');
   var name = prefs.getString('name');
   runApp(GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      // color: Color(0xffaf3557),
-      home: uuid == null
-          ? const LoginPage()
-          : userType == "barber"
-              ? BarberHome(
-                  uuid: uuid,
-                )
-              : UserHome(
-                  uuid: uuid,
-                  name: name ?? "binaya",
-                )));
+    debugShowCheckedModeBanner: false,
+    title: 'Flutter Demo',
+    // color: Color(0xffaf3557),
+    home: EasySplashScreen(
+        durationInSeconds: 5,
+        showLoader: false,
+        backgroundColor: Colors.black,
+        logo: Image.asset('assets/images/dondye.png'),
+        navigator: uuid == null
+            ? const LoginPage()
+            : userType == "barber"
+                ? BarberHome(
+                    uuid: uuid,
+                    name: name!,
+                  )
+                : UserHome(
+                    uuid: uuid,
+                    name: name!,
+                  )),
+  ));
 }
 
 class LoginPage extends StatefulWidget {
@@ -61,12 +69,13 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   final UtilsController _utilsController = Get.put(UtilsController());
-  final Color color = Color(0xffaf3557);
+  final Color color = const Color(0xffaf3557);
 
   userLogin(
       {required String email,
       required String password,
       required BuildContext context}) async {
+    _utilsController.isLoading.value = true;
     String res = await AuthMethod().loginUser(
         email: email,
         password: password,
@@ -76,8 +85,9 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BarberHome(uuid: FirebaseAuth.instance.currentUser!.uid)));
+            builder: (context) => BarberHome(
+                uuid: FirebaseAuth.instance.currentUser!.uid, name: "binaya"),
+          ));
     } else if (res == "customer") {
       Navigator.pushReplacement(
           context,
@@ -95,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res)));
     }
+    _utilsController.isLoading.value = false;
   }
 
   @override
@@ -124,29 +135,30 @@ class _LoginPageState extends State<LoginPage> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: color),
                     ),
-                    disabledBorder: OutlineInputBorder(
+                    disabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
                     ),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
                     ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),
                     labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.white),
+                    labelStyle: const TextStyle(color: Colors.white),
                     hintText: 'Enter your email',
                   ),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Obx(
                   () => TextField(
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     controller: _passwordController,
                     decoration: InputDecoration(
                       isDense: true,
-                      contentPadding: EdgeInsets.all(8),
+                      contentPadding: const EdgeInsets.all(8),
                       suffix: IconButton(
                           onPressed: () {
                             _utilsController.isObscure.value =
@@ -161,10 +173,10 @@ class _LoginPageState extends State<LoginPage> {
                                   Icons.visibility,
                                   color: Colors.white,
                                 )),
-                      disabledBorder: OutlineInputBorder(
+                      disabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                       focusColor: color,
@@ -174,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       labelText: 'Password',
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: const TextStyle(color: Colors.white),
                       hintText: 'Enter password',
                     ),
                     obscureText: _utilsController.isObscure.value,
@@ -185,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    primary: color,
+                    foregroundColor: color,
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -224,14 +236,20 @@ class _LoginPageState extends State<LoginPage> {
                     margin: const EdgeInsets.all(15),
                     decoration: BoxDecoration(
                         color: color, borderRadius: BorderRadius.circular(30)),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 27.0, vertical: 10),
-                      child: Text(
-                        "Login",
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                    )),
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 27.0, vertical: 10),
+                        child: Obx(
+                          () => _utilsController.isLoading.value
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : const Text(
+                                  "Login",
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.white),
+                                ),
+                        ))),
               ),
               const SizedBox(
                 height: 25,
@@ -247,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
-                      primary: color,
+                      foregroundColor: color,
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -270,7 +288,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
-                      primary: color,
+                      foregroundColor: color,
                     ),
                     onPressed: () {
                       Navigator.push(
