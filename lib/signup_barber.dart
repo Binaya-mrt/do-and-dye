@@ -65,66 +65,80 @@ class BarberSignup extends StatelessWidget {
     _phoneController.dispose();
   }
 
+  // make form with validation
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        title: const Image(
+          height: 150,
+          image: AssetImage("assets/images/dondye.png"),
+        ),
+      ),
       body: SafeArea(
           child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            inputForm(
-              hintText: "Your Full Name",
-              labelText: "Full Name",
-              controller: _nameController,
-              textInputType: TextInputType.name,
-            ),
-            inputForm(
-              hintText: "Enter your Email",
-              labelText: "Email",
-              controller: _emailController,
-              textInputType: TextInputType.emailAddress,
-            ),
-            inputForm(
-              hintText: "Enter your Phone Number",
-              labelText: "Phone",
-              controller: _phoneController,
-              textInputType: TextInputType.phone,
-            ),
-            inputForm(
-              hintText: "Shop Name",
-              controller: _shopnameController,
-              labelText: "Shop Name",
-              textInputType: TextInputType.name,
-            ),
-            inputForm(
-              hintText: "Shop Address",
-              labelText: "Shop Address",
-              controller: _shopaddressController,
-              textInputType: TextInputType.streetAddress,
-            ),
-            inputForm(
-              hintText: "No of counter",
-              labelText: "No of counter",
-              controller: _noofcounterController,
-              textInputType: TextInputType.number,
-            ),
-            inputForm(
-              hintText: "PAN Number",
-              labelText: "PAN number",
-              controller: _pannumberController,
-              textInputType: TextInputType.number,
-            ),
-            inputForm(
-                hintText: "Enter password",
-                labelText: "Password",
-                controller: _passwordController,
-                textInputType: TextInputType.visiblePassword,
-                obscureText: true),
-            //ToDo: Add a button to upload shop image, and a button to upload shop license
-            Center(
-              child: ElevatedButton(
-                  onPressed: () {
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              inputForm(
+                hintText: "Your Full Name",
+                labelText: "Full Name",
+                controller: _nameController,
+                textInputType: TextInputType.name,
+              ),
+              inputForm(
+                hintText: "Your Email",
+                labelText: "Email",
+                controller: _emailController,
+                textInputType: TextInputType.emailAddress,
+              ),
+              inputForm(
+                hintText: "Your Phone Number",
+                labelText: "Phone",
+                controller: _phoneController,
+                textInputType: TextInputType.phone,
+              ),
+              inputForm(
+                hintText: "Shop Name",
+                controller: _shopnameController,
+                labelText: "Shop Name",
+                textInputType: TextInputType.name,
+              ),
+              inputForm(
+                hintText: "Shop Address",
+                labelText: "Shop Address",
+                controller: _shopaddressController,
+                textInputType: TextInputType.streetAddress,
+              ),
+              inputForm(
+                hintText: "No of counter",
+                labelText: "No of counter",
+                controller: _noofcounterController,
+                textInputType: TextInputType.number,
+              ),
+              inputForm(
+                hintText: "PAN Number",
+                labelText: "PAN number",
+                controller: _pannumberController,
+                textInputType: TextInputType.number,
+              ),
+              inputForm(
+                  hintText: "Password",
+                  labelText: "Password",
+                  controller: _passwordController,
+                  textInputType: TextInputType.visiblePassword,
+                  obscureText: true),
+              //ToDo: Add a button to upload shop image, and a button to upload shop license
+
+              GestureDetector(
+                onTap: (() {
+                  if (_formKey.currentState!.validate()) {
                     barberSignup(
                       name: _nameController.text,
                       email: _emailController.text,
@@ -136,10 +150,24 @@ class BarberSignup extends StatelessWidget {
                       phone: _phoneController.text,
                       context: context,
                     );
-                  },
-                  child: const Text("Signup as a Owner")),
-            )
-          ],
+                  }
+                }),
+                child: Container(
+                    margin: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        color: const Color(0xffaf3557),
+                        borderRadius: BorderRadius.circular(30)),
+                    child: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 27.0, vertical: 10),
+                      child: Text(
+                        "Signup as a Owner",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    )),
+              ),
+            ],
+          ),
         ),
       )),
     );
@@ -154,10 +182,27 @@ class BarberSignup extends StatelessWidget {
   }) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextField(
+      child: TextFormField(
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter ${hintText.toLowerCase()}';
+          }
+          return null;
+        },
         decoration: InputDecoration(
+          focusColor: const Color(0xffaf3557),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xffaf3557)),
+          ),
+          disabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xffaf3557)),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xffaf3557)),
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           labelText: labelText,
-          filled: true,
+          labelStyle: const TextStyle(color: Color(0xffaf3557)),
           hintText: hintText,
         ),
         obscureText: obscureText,

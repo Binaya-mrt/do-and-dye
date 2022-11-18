@@ -46,54 +46,65 @@ class UserSignup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          inputForm(
-              hintText: "Enter your FullName",
-              labelText: "Full Name",
-              controller: _nameController,
-              textInputType: TextInputType.name),
-          inputForm(
-            hintText: "Enter your Email",
-            labelText: "Email",
-            controller: _emailController,
-            textInputType: TextInputType.emailAddress,
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.black,
+          title: const Image(
+            height: 150,
+            image: AssetImage("assets/images/dondye.png"),
           ),
-          inputForm(
-              hintText: "Enter your Phone Number",
-              labelText: "Phone",
-              controller: _phoneController,
-              textInputType: TextInputType.phone),
-          inputForm(
-              hintText: "Enter your Address",
-              labelText: "Address",
-              controller: _address,
-              textInputType: TextInputType.emailAddress),
-          inputForm(
-              hintText: "Choose a Password",
-              labelText: "Password",
-              textInputType: TextInputType.visiblePassword,
-              controller: _passwordController,
-              obscureText: true),
-          Center(
-            child: ElevatedButton(
-                onPressed: () {
-                  userSignup(
-                    name: _nameController.text,
-                    email: _emailController.text,
-                    password: _passwordController.text,
-                    address: _address.text,
-                    phone: _phoneController.text,
-                    context: context,
-                  );
-                },
-                child: const Text("Signup as a User")),
-          )
-        ],
-      ),
-    ));
+          actions: [
+            IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          ],
+        ),
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              inputForm(
+                  hintText: "Enter your FullName",
+                  labelText: "Full Name",
+                  controller: _nameController,
+                  textInputType: TextInputType.name),
+              inputForm(
+                hintText: "Enter your Email",
+                labelText: "Email",
+                controller: _emailController,
+                textInputType: TextInputType.emailAddress,
+              ),
+              inputForm(
+                  hintText: "Enter your Phone Number",
+                  labelText: "Phone",
+                  controller: _phoneController,
+                  textInputType: TextInputType.phone),
+              inputForm(
+                  hintText: "Enter your Address",
+                  labelText: "Address",
+                  controller: _address,
+                  textInputType: TextInputType.emailAddress),
+              inputForm(
+                  hintText: "Choose a Password",
+                  labelText: "Password",
+                  textInputType: TextInputType.visiblePassword,
+                  controller: _passwordController,
+                  obscureText: true),
+              Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      userSignup(
+                        name: _nameController.text,
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                        address: _address.text,
+                        phone: _phoneController.text,
+                        context: context,
+                      );
+                    },
+                    child: const Text("Signup as a User")),
+              )
+            ],
+          ),
+        ));
   }
 
   inputForm(
