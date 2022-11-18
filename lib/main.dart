@@ -224,6 +224,8 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     activeTrackColor: const Color(0xffaf3557),
                     activeColor: const Color(0xffaf3557),
+                    inactiveThumbColor: Colors.white,
+                    inactiveTrackColor: Colors.white,
                   ),
                 ],
               ),
