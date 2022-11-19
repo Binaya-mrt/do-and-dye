@@ -61,7 +61,7 @@ class UserBooking extends StatelessWidget {
                       FullScreenWidget(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Container(
+                          child: SizedBox(
                             height: 150,
                             width: 150,
                             child: snap["shopImage"] == null

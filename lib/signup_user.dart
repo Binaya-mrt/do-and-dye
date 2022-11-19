@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserSignup extends StatefulWidget {
-  UserSignup({super.key});
+  const UserSignup({super.key});
 
   @override
   State<UserSignup> createState() => _UserSignupState();

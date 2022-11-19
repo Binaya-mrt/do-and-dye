@@ -183,7 +183,7 @@ class UserHome extends StatelessWidget {
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(16),
-                                            child: Container(
+                                            child: SizedBox(
                                                 height: 150,
                                                 width: 200,
                                                 child: (snapshot

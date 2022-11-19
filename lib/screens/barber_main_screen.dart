@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../controllers/constant.dart';
 
 class BarberHome extends StatefulWidget {
   final String uuid;
@@ -97,9 +96,9 @@ class _BarberHomeState extends State<BarberHome> {
             ListTile(
               title: const Text("Change Location"),
               onTap: () async {
-                SharedPreferences _prefs =
+                SharedPreferences prefs =
                     await SharedPreferences.getInstance();
-                log(_prefs.getString('uuid')!);
+                log(prefs.getString('uuid')!);
               },
             ),
             ListTile(
