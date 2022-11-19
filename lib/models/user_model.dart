@@ -32,6 +32,8 @@ class UserModel {
   final String? pannumber;
   final bool isBarber;
   final String phone;
+  final String? profileImage;
+  final String? shopImage;
   const UserModel({
     required this.email,
     required this.uid,
@@ -42,6 +44,8 @@ class UserModel {
     this.pannumber,
     required this.isBarber,
     required this.phone,
+    this.profileImage,
+    this.shopImage,
   });
 
   static UserModel fromSnap(DocumentSnapshot snap) {
@@ -57,6 +61,8 @@ class UserModel {
       noofcounter: snapshot['noofcounter'],
       pannumber: snapshot['pannumber'],
       isBarber: snapshot['isBarber'],
+      profileImage: snapshot['profileImage'],
+      shopImage: snapshot['shopImage'],
     );
   }
 
@@ -69,5 +75,8 @@ class UserModel {
         'noofcounter': noofcounter,
         'pannumber': pannumber,
         'isBarber': isBarber,
+        'phone': phone,
+        'profileImage': profileImage,
+        'shopImage': shopImage,
       };
 }

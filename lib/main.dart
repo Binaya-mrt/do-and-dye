@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:do_and_dye/auth/auth_method.dart';
 import 'package:do_and_dye/controllers/constant.dart';
+import 'package:do_and_dye/controllers/prefs.dart';
 import 'package:do_and_dye/controllers/utils_controller.dart';
+import 'package:do_and_dye/models/user_model.dart';
 import 'package:do_and_dye/screens/barber_main_screen.dart';
 import 'package:do_and_dye/screens/user_main_screen.dart';
 import 'package:do_and_dye/signup_barber.dart';
@@ -27,6 +29,10 @@ void main() async {
             projectId: "do-and-dye"));
   } else {
     await Firebase.initializeApp();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var name = prefs.getString('name');
+    PreferenceUtils.init();
+    log("THe name is saved as $name");
   }
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -86,7 +92,8 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
             builder: (context) => BarberHome(
-                uuid: FirebaseAuth.instance.currentUser!.uid, name: "binaya"),
+                uuid: FirebaseAuth.instance.currentUser!.uid,
+                name: PreferenceUtils.getString('name')),
           ));
     } else if (res == "customer") {
       Navigator.pushReplacement(
@@ -94,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
           MaterialPageRoute(
               builder: (context) => UserHome(
                     uuid: FirebaseAuth.instance.currentUser!.uid,
-                    name: "binaya",
+                    name: PreferenceUtils.getString('name'),
                   )));
     } else if (res == "The email address is badly formatted.") {
       ScaffoldMessenger.of(context)

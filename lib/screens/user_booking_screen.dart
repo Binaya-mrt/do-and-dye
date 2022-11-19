@@ -55,14 +55,24 @@ class UserBooking extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FullScreenWidget(
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundImage: NetworkImage(
-                            imageLink,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: 150,
+                            width: 150,
+                            child: snap["shopImage"] == null
+                                ? Image.network(
+                                    imageLink,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.network(
+                                    snap["shopImage"],
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                       ),

@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/controllers/barber_customer_list.dart';
+import 'package:do_and_dye/controllers/prefs.dart';
 import 'package:do_and_dye/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../controllers/constant.dart';
 
 class BarberHome extends StatefulWidget {
   final String uuid;
@@ -22,14 +27,41 @@ const Color color = Color(0xffaf3557);
 class _BarberHomeState extends State<BarberHome> {
   // @override
 
-  // void initState() {
-  //   super.initState();
-  //   print('hello world');
-  //   _list.getAppointmentList();
-
+// String uuid= prefs.getString('uuid')!;
+  // SharedPreferences? sharedPrefs;
+  // loadPrefs() async {
+  //   var sharedPrefs = await SharedPreferences.getInstance();
+  //   String? name = sharedPrefs.getString('name');
+  //   return name;
+  // }
+  // getStringValuesSF() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   //Return String
+  //   String? stringValue = prefs.getString('name');
+  //   return stringValue;
   // }
 
-// String uuid= prefs.getString('uuid')!;
+  static SharedPreferences? _prefs; //or: static late SharedPreferences _prefs;
+
+  static init() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // sharedPrefs = Utils().getSharedPrefs();
+    // SharedPreferences.getInstance().then((prefs) {
+    //   setState(() => sharedPrefs = prefs);
+    // });
+    // log(sharedPrefs.getString('name')!);
+    log("this fuck is called");
+    // var name = getStringValuesSF();
+    // log(name);
+    // log(_prefs!.getString('name')!);
+    // log(username);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +80,7 @@ class _BarberHomeState extends State<BarberHome> {
               decoration: const BoxDecoration(
                 color: Color(0xffaf3557),
               ),
-              accountName: Text(widget.name),
+              accountName: Text(PreferenceUtils.getString('name')),
               accountEmail: Text(widget.uuid),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.white,
@@ -64,7 +96,11 @@ class _BarberHomeState extends State<BarberHome> {
             ),
             ListTile(
               title: const Text("Change Location"),
-              onTap: () async {},
+              onTap: () async {
+                SharedPreferences _prefs =
+                    await SharedPreferences.getInstance();
+                log(_prefs.getString('uuid')!);
+              },
             ),
             ListTile(
               title: const Text("Logout"),

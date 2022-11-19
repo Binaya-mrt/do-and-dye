@@ -1,21 +1,42 @@
+import 'dart:ui';
+
+import 'package:do_and_dye/controllers/constant.dart';
 import 'package:do_and_dye/controllers/utils_controller.dart';
 import 'package:do_and_dye/main.dart';
+import 'package:do_and_dye/screens/barber_main_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'auth/auth_method.dart';
 
-class BarberSignup extends StatelessWidget {
+class BarberSignup extends StatefulWidget {
   BarberSignup({super.key});
+
+  @override
+  State<BarberSignup> createState() => _BarberSignupState();
+}
+
+class _BarberSignupState extends State<BarberSignup> {
   final TextEditingController _nameController = TextEditingController();
+
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
+
   final TextEditingController _shopnameController = TextEditingController();
+
   final TextEditingController _shopaddressController = TextEditingController();
+
   final TextEditingController _noofcounterController = TextEditingController();
+
   final TextEditingController _pannumberController = TextEditingController();
+
   final TextEditingController _phoneController = TextEditingController();
+
   final UtilsController _utilsController = Get.put(UtilsController());
+
   barberSignup({
     required String name,
     required String email,
@@ -26,6 +47,8 @@ class BarberSignup extends StatelessWidget {
     required String pannumber,
     required String phone,
     required BuildContext context,
+    required Uint8List profileImage,
+    required Uint8List shopImage,
   }) async {
     _utilsController.isLoading.value = true;
     String res = await AuthMethod().signUpUser(
@@ -38,6 +61,8 @@ class BarberSignup extends StatelessWidget {
       pannumber: _pannumberController.text,
       phone: _phoneController.text,
       isBarber: true,
+      profileImage: profileImage,
+      shopImage: shopImage,
     );
     if (res == "success") {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -57,6 +82,24 @@ class BarberSignup extends StatelessWidget {
     _utilsController.isLoading.value = false;
   }
 
+  Uint8List? profileImage;
+
+  Uint8List? shopImage;
+  void selectImage(ImageSource source, String type) async {
+    final image = await _utilsController.pickImage(source);
+    if (image != null) {
+      if (type == "profile") {
+        setState(() {
+          profileImage = image;
+        });
+      } else {
+        setState(() {
+          shopImage = image;
+        });
+      }
+    }
+  }
+
   @override
   dispose() {
     _nameController.dispose();
@@ -67,9 +110,10 @@ class BarberSignup extends StatelessWidget {
     _noofcounterController.dispose();
     _pannumberController.dispose();
     _phoneController.dispose();
+    super.dispose();
   }
 
-  // make form with validation
+// void selectProfileImage() async {
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -90,6 +134,38 @@ class BarberSignup extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Stack(
+                    children: [
+                      profileImage == null
+                          ? const CircleAvatar(
+                              radius: 60,
+                              backgroundImage: NetworkImage(
+                                  "https://t4.ftcdn.net/jpg/00/97/00/09/360_F_97000908_wwH2goIihwrMoeV9QF3BW6HtpsVFaNVM.jpg"),
+                              // backgroundImage: profileImage == null
+                              //     ? NetworkImage( "https://t4.ftcdn.net/jpg/00/97/00/09/360_F_97000908_wwH2goIihwrMoeV9QF3BW6HtpsVFaNVM.jpg")
+                            )
+                          : CircleAvatar(
+                              radius: 60,
+                              backgroundImage: MemoryImage(profileImage!),
+                            ),
+                      Positioned(
+                          bottom: 0,
+                          right: 20,
+                          child: IconButton(
+                              onPressed: () {
+                                selectImage(ImageSource.gallery, "profile");
+                              },
+                              icon: const Icon(
+                                Icons.add_a_photo,
+                                color: color,
+                              ))),
+                    ],
+                  ),
+                ),
+              ),
               inputForm(
                 hintText: "Your Full Name",
                 labelText: "Full Name",
@@ -108,6 +184,12 @@ class BarberSignup extends StatelessWidget {
                 controller: _phoneController,
                 textInputType: TextInputType.phone,
               ),
+              inputForm(
+                  hintText: "Password",
+                  labelText: "Password",
+                  controller: _passwordController,
+                  textInputType: TextInputType.visiblePassword,
+                  obscureText: true),
               inputForm(
                 hintText: "Shop Name",
                 controller: _shopnameController,
@@ -132,17 +214,39 @@ class BarberSignup extends StatelessWidget {
                 controller: _pannumberController,
                 textInputType: TextInputType.number,
               ),
-              inputForm(
-                  hintText: "Password",
-                  labelText: "Password",
-                  controller: _passwordController,
-                  textInputType: TextInputType.visiblePassword,
-                  obscureText: true),
+              GestureDetector(
+                onTap: () => selectImage(ImageSource.gallery, "shop"),
+                child: Card(
+                  child: ListTile(
+                    title: Text(
+                      "Upload Shop image",
+                      style: TextStyle(color: color),
+                    ),
+                    trailing: IconButton(
+                        icon: Icon(
+                          Icons.add_a_photo,
+                          color: color,
+                        ),
+                        onPressed: () {
+                          selectImage(ImageSource.gallery, "shop");
+                        }),
+                  ),
+                ),
+              ),
+              shopImage == null
+                  ? Container()
+                  : Container(
+                      height: 200,
+                      width: 200,
+                      child: Image.memory(shopImage!),
+                    ),
               //ToDo: Add a button to upload shop image, and a button to upload shop license
 
               GestureDetector(
                 onTap: (() {
-                  if (_formKey.currentState!.validate()) {
+                  if (_formKey.currentState!.validate() &&
+                      profileImage != null &&
+                      shopImage != null) {
                     barberSignup(
                       name: _nameController.text,
                       email: _emailController.text,
@@ -153,6 +257,8 @@ class BarberSignup extends StatelessWidget {
                       pannumber: _pannumberController.text,
                       phone: _phoneController.text,
                       context: context,
+                      profileImage: profileImage!,
+                      shopImage: shopImage!,
                     );
                   }
                 }),

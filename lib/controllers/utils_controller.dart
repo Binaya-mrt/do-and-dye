@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UtilsController extends GetxController {
   RxBool isObscure = true.obs;
@@ -11,5 +13,16 @@ class UtilsController extends GetxController {
 
   void toggleBarber() {
     isBarber.value = !isBarber.value;
+  }
+
+  pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      return pickedFile.readAsBytes();
+    }
+    return null;
+
+    // return pickedFile;
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_and_dye/main.dart';
 import 'package:do_and_dye/screens/user_booking_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -104,8 +105,8 @@ class UserHome extends StatelessWidget {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Card(
                                     color: index % 2 == 0
-                                        ? const Color(0xffFFF0EC)
-                                        : const Color(0xffEBF5FF),
+                                        ? Colors.black
+                                        : Colors.white,
                                     child: Row(
                                       children: [
                                         Expanded(
@@ -135,13 +136,16 @@ class UserHome extends StatelessWidget {
                                               detailsText(
                                                   (snapshot.data as dynamic)
                                                       .docs[index]
-                                                      .data()["name"]),
+                                                      .data()["name"],
+                                                  index),
                                               detailsText(
                                                   (snapshot.data as dynamic)
                                                       .docs[index]
-                                                      .data()["shopaddress"]),
+                                                      .data()["shopaddress"],
+                                                  index),
                                               detailsText(
-                                                  "Counter: ${(snapshot.data as dynamic).docs[index].data()["noofcounter"]}"),
+                                                  "Counter: ${(snapshot.data as dynamic).docs[index].data()["noofcounter"]}",
+                                                  index),
                                               GestureDetector(
                                                 onTap: (() =>
                                                     Get.to(() => UserBooking(
@@ -175,27 +179,59 @@ class UserHome extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            height: 200,
-                                            width: 200,
-                                            decoration: const BoxDecoration(
-                                              // rounded border
-                                              borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(20),
-                                                  bottomRight:
-                                                      Radius.circular(20)),
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2Fsb258ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
-                                              )),
-                                            ),
+                                        FullScreenWidget(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            child: Container(
+                                                height: 150,
+                                                width: 200,
+                                                child: (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState.waiting)
+                                                    ? const Center(
+                                                        child:
+                                                            CircularProgressIndicator())
+                                                    : (snapshot.data as dynamic)
+                                                                    .docs[index]
+                                                                    .data()[
+                                                                "profileImage"] ==
+                                                            null
+                                                        ? Image.network(
+                                                            "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2Fsb258ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+                                                            fit: BoxFit.fill,
+                                                          )
+                                                        : Image.network(
+                                                            (snapshot.data
+                                                                        as dynamic)
+                                                                    .docs[index]
+                                                                    .data()[
+                                                                "profileImage"],
+                                                            fit: BoxFit.fill,
+                                                          )),
                                           ),
                                         ),
+                                        // ClipRRect(
+                                        //   borderRadius:
+                                        //       BorderRadius.circular(10),
+                                        //   child: Container(
+                                        //     padding: const EdgeInsets.symmetric(
+                                        //         vertical: 4.0),
+                                        //     height: 200,
+                                        //     width: 200,
+                                        //     decoration: const BoxDecoration(
+                                        //       // rounded border
+                                        //       borderRadius: BorderRadius.only(
+                                        //           topRight: Radius.circular(20),
+                                        //           bottomRight:
+                                        //               Radius.circular(20)),
+                                        //       image: DecorationImage(
+                                        //           image: NetworkImage(
+                                        //         "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2Fsb258ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+                                        //       )),
+                                        //     ),
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),
@@ -214,12 +250,17 @@ class UserHome extends StatelessWidget {
 
   Padding detailsText(
     String title,
+    int index,
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
       child: Text(
         title,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+          color: index % 2 == 0 ? Colors.white : Colors.black,
+        ),
       ),
     );
   }

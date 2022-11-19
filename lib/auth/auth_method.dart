@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_and_dye/auth/storage_method.dart';
 import 'package:do_and_dye/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthMethod {
@@ -11,17 +13,18 @@ class AuthMethod {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   // Signup with email and password
-  Future<String> signUpUser({
-    required String name,
-    required String email,
-    required String password,
-    String? shopname,
-    required String address,
-    int? noofcounter,
-    String? pannumber,
-    required String phone,
-    required bool isBarber,
-  }) async {
+  Future<String> signUpUser(
+      {required String name,
+      required String email,
+      required String password,
+      String? shopname,
+      required String address,
+      int? noofcounter,
+      String? pannumber,
+      required String phone,
+      required bool isBarber,
+      Uint8List? profileImage,
+      Uint8List? shopImage}) async {
     String res = "Some error occured";
 
     try {
@@ -32,6 +35,10 @@ class AuthMethod {
       // We also need to store bio and username in firestore
       // (_fireStrore.collection("users").doc(cred.user!.uid));
       if (isBarber) {
+        String profileUrl = await StorageMethod().uploadImageToStorage(
+            childName: "barberProfile", image: profileImage!);
+        String shopImageUrl = await StorageMethod().uploadImageToStorage(
+            childName: "barberProfile", image: shopImage!);
         await _fireStore
             .collection(
               "users",
@@ -47,6 +54,8 @@ class AuthMethod {
           "phone": phone,
           "uid": cred.user!.uid,
           "isBarber": isBarber,
+          "profileImage": profileUrl,
+          "shopImage": shopImageUrl,
         });
 
         await _fireStore
@@ -113,6 +122,8 @@ class AuthMethod {
 
             prefs.setString("userType", "barber");
             res = "barber";
+            log(user.name);
+            // log(user.shopImage!);
           } else if (!inputBarber) {
             UserModel user = UserModel.fromSnap(await _fireStore
                 .collection("customers")
